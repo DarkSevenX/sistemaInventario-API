@@ -1,4 +1,4 @@
-import { categoryService } from "../service/categoryService.js";
+import { categoryService } from '../service/categoryService.js';
 
 class CategoryController {
   // Crear una categoría
@@ -8,7 +8,7 @@ class CategoryController {
       res.status(201).json(category);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error creating category" });
+      res.status(500).json({ message: 'Error creating category' });
     }
   }
 
@@ -19,22 +19,21 @@ class CategoryController {
       res.json(categories);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error getting categories" });
+      res.status(500).json({ message: 'Error getting categories' });
     }
   }
 
-  
   // Obtener una categoría por ID
   async getCategoryById(req, res) {
     try {
       const category = await categoryService.getCategoryById(req.params.id);
       if (!category) {
-        return res.status(404).json({ message: "Category not found" });
+        return res.status(404).json({ message: 'Category not found' });
       }
       res.json(category);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error getting category" });
+      res.status(500).json({ message: 'Error getting category' });
     }
   }
 
@@ -45,13 +44,14 @@ class CategoryController {
         req.params.id,
         req.body
       );
-      if (!category) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-      res.json(category);
+
+      return res.json(category);
     } catch (error) {
+      if (error.code === 'P2025') {
+        return res.status(404).json({ message: 'Category not found' });
+      }
       console.error(error);
-      res.status(500).json({ message: "Error updating category" });
+      return res.status(500).json({ message: 'Error updating category' });
     }
   }
 
@@ -60,13 +60,15 @@ class CategoryController {
     try {
       const category = await categoryService.deleteCategory(req.params.id);
       if (!category) {
-        return res.status(404).json({ message: "Category not found" });
+        return res.status(404).json({ message: 'Category not found' });
       }
       res.status(204).send();
     } catch (error) {
+      if (error.code === 'P2025') {
+        return res.status(404).json({ message: 'Category not found' });
+      }
       console.error(error);
-      console.log(req.params.id)
-      res.status(500).json({ message: "Error deleting category" });
+      return res.status(500).json({ message: 'Error deleting category' });
     }
   }
 }

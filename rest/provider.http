@@ -1,0 +1,26 @@
+
+POST http://localhost:8000/provider
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "contact": "+1 123-456-7890",
+  "email": "john.doe@example.com2"
+}
+
+### Obtener todos los proveedores
+GET http://localhost:8000/provider
+
+### Obtener un proveedor por ID
+GET http://localhost:8000/provider/3
+
+### Actualizar un proveedor por ID
+PATCH http://localhost:8000/provider/2
+Content-Type: application/json
+
+{
+  "name": "sorany"
+}
+
+### Eliminar un proveedor por ID
+DELETE http://localhost:8000/provider/2

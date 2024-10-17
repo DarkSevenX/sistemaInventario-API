@@ -9,7 +9,7 @@ class ProductController {
       res.status(201).json(product);
     } catch (error) {
       console.error(error);
-      console.log(req.body)
+      console.log(req.body);
       res.status(500).json({ message: 'Error creando el producto' });
     }
   }
@@ -46,13 +46,17 @@ class ProductController {
       const id = req.params.id;
       const data = req.body;
       const updatedProduct = await productService.updateProduct(id, data);
-      if (!updatedProduct) {
-        return res.status(404).json({ message: 'Producto no encontrado' });
-      }
+
       res.json(updatedProduct);
     } catch (error) {
+      if (error.code === 'P2025') {
+        return res.status(404).json({ message: 'Producto no encontrado' });
+      }
+
       console.error(error);
-      res.status(500).json({ message: 'Error actualizando el producto' });
+      return res
+        .status(500)
+        .json({ message: 'Error actualizando el producto' });
     }
   }
 
@@ -61,13 +65,14 @@ class ProductController {
     try {
       const id = req.params.id;
       const deletedProduct = await productService.deleteProduct(id);
-      if (!deletedProduct) {
-        return res.status(404).json({ message: 'Producto no encontrado' });
-      }
+
       res.status(204).send();
     } catch (error) {
+      if (error.code === 'P2025') {
+        return res.status(404).json({ message: 'Producto no encontrado' });
+      }
       console.error(error);
-      res.status(500).json({ message: 'Error eliminando el producto' });
+      return res.status(500).json({ message: 'Error eliminando el producto' });
     }
   }
 }

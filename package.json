@@ -14,7 +14,8 @@
   "dependencies": {
     "@prisma/client": "^5.20.0",
     "cors": "^2.8.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "express-authrouter": "^3.2.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

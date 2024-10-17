@@ -10,15 +10,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       Int      @id @default(autoincrement())
+  username String   @unique()
+  password String
+  products Product[]
+  ventas Venta[]
+}
+
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String
-  category  Category @relation(fields: [categoryId], references: [id])
+  id         Int      @id @default(autoincrement())
+  name       String
+  category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
-  provider  Provider @relation(fields: [providerId], references: [id])
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
   providerId Int
-  price     Float
-  stock     Int
+  price      Float
+  stock      Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  ventas     Venta[]  // Agregamos una referencia aquí a las ventas
 }
 
 model Category {
@@ -34,5 +45,16 @@ model Provider {
   contact String
   email   String   @unique
   products Product[]
+}
+
+model Venta {
+  id          Int       @id @default(autoincrement())
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+  quantity    Int
+  totalPrice  Float
+  date        DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
 }
 

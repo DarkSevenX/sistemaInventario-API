@@ -1,0 +1,27 @@
+
+### crear nueva categoria
+POST http://localhost:8000/category
+Content-Type: application/json
+
+{
+  "name": "deporte",
+  "description": "Descripcion de la nueva categoria"
+}
+
+### obtener todas las categorías
+GET http://localhost:8000/category
+
+### obtener categoria por ID
+GET http://localhost:8000/category/1
+
+### actualizar categoria
+PATCH http://localhost:8000/category/1
+Content-Type: application/json
+
+{
+  "name": "hogar actualizado",
+  "description": "Descripcion de la categoria actualizada"
+}
+
+### eliminar categoria
+DELETE http://localhost:8000/category/1
