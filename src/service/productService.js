@@ -51,7 +51,7 @@ class ProductService {
     return await prisma.product.update({
       where: { 
         id: Number(productId),
-        userId: data.userId
+        userId
       },
       data: {
         name: data.name,

@@ -1,7 +1,9 @@
 import {Router} from "express";
 import { providerController } from "../controller/providerController.js";
+import { auth } from "./authRoutes.js";
 
 const router = Router()
+router.use(auth.protect())
 
 router
   .post("/", providerController.createProvider)

@@ -8,10 +8,13 @@ class UserService {
       where: {
         id: Number(userId)
       },
-      include: {
+      select: {
+        id: true,
+        username: true,
         ventas: true,
         categorias: true,
-        products: true
+        products: true,
+        providers: true
       }
     });
   }

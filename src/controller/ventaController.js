@@ -4,7 +4,7 @@ import { productService } from '../service/productService.js';
 class VentaController {
   // nueva venta
   async createVenta(req, res) {
-    const { productId, cantidad } = req.body;
+    const { productId, quantity } = req.body;
     const userId = req.user.id;
 
     try {
@@ -13,13 +13,11 @@ class VentaController {
       if (!product) {
         return res.status(404).json({ error: 'Producto no encontrado' });
       }
-
-      const venta = await ventaService.createVenta(
-        userId,
-        productId,
-        cantidad,
-        product.price
-      );
+      if (product.stock < quantity) {
+        return res.status(400).json({ error: 'Stock insuficiente' });
+      }
+      
+      const venta = await ventaService.createVenta(userId, product, quantity);
       return res.status(201).json({ venta });
     } catch (error) {
       console.error(error);

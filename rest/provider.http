@@ -1,6 +1,7 @@
 
 POST http://localhost:8000/provider
 Content-Type: application/json
+token: {{token}}
 
 {
   "name": "John Doe",
@@ -10,13 +11,16 @@ Content-Type: application/json
 
 ### Obtener todos los proveedores
 GET http://localhost:8000/provider
+token: {{token}}
 
 ### Obtener un proveedor por ID
-GET http://localhost:8000/provider/3
+GET http://localhost:8000/provider/1
+token: {{token}}
 
 ### Actualizar un proveedor por ID
-PATCH http://localhost:8000/provider/2
+PATCH http://localhost:8000/provider/1
 Content-Type: application/json
+token: {{token}}
 
 {
   "name": "sorany"
@@ -24,3 +28,4 @@ Content-Type: application/json
 
 ### Eliminar un proveedor por ID
 DELETE http://localhost:8000/provider/2
+token: {{token}}

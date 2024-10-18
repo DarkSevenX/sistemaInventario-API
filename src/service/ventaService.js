@@ -1,18 +1,27 @@
 import { prisma } from '../config/database.js';
+import { productService } from './productService.js';
 
 class VentaService {
   // Crear una nueva venta asociada a un usuario
-  async createVenta(userId, productId, cantidad, precio) {
-    const totalPrice = precio * cantidad;
+  async createVenta(userId, product, quantity) {
+    const totalPrice = product.price * quantity;
+
+    //reducir el stock dependiendo de la cantidad
+    await productService.updateProduct(userId, product.id, {
+      stock: product.stock - quantity
+    });
 
     // Crear la venta, asociándola con el usuario
     return await prisma.venta.create({
       data: {
-        product: { connect: { id: productId } },
-        cantidad,
+        product: {
+          connect: { id: product.id }
+        },
+        quantity,
         totalPrice,
-        fecha,
-        user: { connect: { id: userId } }
+        user: {
+          connect: { id: userId }
+        }
       }
     });
   }

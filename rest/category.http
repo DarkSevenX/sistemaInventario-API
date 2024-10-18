@@ -5,7 +5,7 @@ Content-Type: application/json
 token: {{token}}
 
 {
-  "name": "hogar",
+  "name": "categoria2",
   "description": "Descripcion de la nueva categoria"
 }
 
@@ -18,15 +18,14 @@ GET http://localhost:8000/category/3
 token: {{token}}
 
 ### actualizar categoria
-PATCH http://localhost:8000/category/1
+PATCH http://localhost:8000/category/3
 Content-Type: application/json
 token: {{token}}
 
 {
-  "name": "hogar actualizado",
-  "description": "Descripcion de la categoria actualizada"
+  "name": "categoria 3 editada"
 }
 
 ### eliminar categoria
-DELETE http://localhost:8000/category/2
+DELETE http://localhost:8000/category/3
 token: {{token}}

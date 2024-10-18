@@ -43,6 +43,8 @@ class ProductController {
 
   // Obtener todos los productos
   async getAllProducts(req, res) {
+    const userId = req.user.id;
+
     try {
       const products = await productService.getAllProducts(userId);
       return res.status(200).json(products);

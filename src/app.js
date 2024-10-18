@@ -25,3 +25,4 @@ app.use('/venta', ventaRoutes)
 app.listen(port, () => {
   console.log(`app running on http://localhost:${port}/`);
 });
+
