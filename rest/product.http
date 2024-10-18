@@ -2,24 +2,28 @@
 ### crear un producto
 POST http://localhost:8000/product
 Content-Type: application/json
+token: {{token}}
 
 {
-  "name": "Producto 2",
+  "name": "Producto 1",
   "categoryId": 3, 
-  "providerId": 1,
+  "supplierId": 1,
   "price": 10.99,
   "stock": 100
 }
 
 ### obtener todos los productos
 GET http://localhost:8000/product
+token: {{token}}
 
 ### obtener producto por ID
 GET http://localhost:8000/product/2
+token: {{token}}
 
 ### actualizar producto
 PATCH http://localhost:8000/product/2
 Content-Type: application/json
+token: {{token}}
 
 {
   "name": "Producto 2 modificado"
@@ -27,3 +31,4 @@ Content-Type: application/json
 
 ### eliminar producto
 DELETE http://localhost:8000/product/2
+token: {{token}}

@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 
-// Import routes
 app.use('/auth', auth.routes());
 app.use('/user', userRoutes);
 app.use('/product', productRoutes);

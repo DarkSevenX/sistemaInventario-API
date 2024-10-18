@@ -15,7 +15,9 @@ model User {
   username String   @unique()
   password String
   products Product[]
-  ventas Venta[]
+  ventas   Venta[]
+  categorias Category[]
+  providers Provider[]
 }
 
 model Product {
@@ -37,6 +39,8 @@ model Category {
   name        String
   description String?
   products    Product[]
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
 }
 
 model Provider {
@@ -45,6 +49,8 @@ model Provider {
   contact String
   email   String   @unique
   products Product[]
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
 }
 
 model Venta {

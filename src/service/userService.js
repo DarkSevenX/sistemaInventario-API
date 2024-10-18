@@ -1,30 +1,37 @@
-import { prisma } from "../config/database.js";
+import { prisma } from '../config/database.js';
 
 // user service
 class UserService {
   // get user
-  async getUser(id) {
+  async getUser(userId) {
     return await prisma.user.findUnique({
-      where: { id: Number(id) },
-    });
-  }
-
-  // delete user
-  async deleteUser(id) {
-    return await prisma.user.delete({
-      where: { id: Number(id) },
+      where: {
+        id: Number(userId)
+      },
+      include: {
+        ventas: true,
+        categorias: true,
+        products: true
+      }
     });
   }
 
   // update user
-  async updateUser(id, data) {
+  async updateUser(userId, data) {
     return await prisma.user.update({
-      where: { id: Number(id) },
+      where: { id: Number(userId) },
       data: {
         name: data.name,
         email: data.email,
-        password: data.password,
-      },
+        password: data.password
+      }
+    });
+  }
+
+  // delete user
+  async deleteUser(userId) {
+    return await prisma.user.delete({
+      where: { id: Number(userId) }
     });
   }
 }

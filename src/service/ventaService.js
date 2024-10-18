@@ -2,56 +2,30 @@ import { prisma } from '../config/database.js';
 
 class VentaService {
   // Crear una nueva venta asociada a un usuario
-  async createVenta(userId, productId, cantidad) {
-    try {
-      // Buscar el producto para obtener su precio
-      const product = await prisma.product.findUnique({
-        where: {
-          id: productId,
-          userId
-        }
-      });
+  async createVenta(userId, productId, cantidad, precio) {
+    const totalPrice = precio * cantidad;
 
-      if (!product) {
-        throw new Error('Product not found');
+    // Crear la venta, asociándola con el usuario
+    return await prisma.venta.create({
+      data: {
+        product: { connect: { id: productId } },
+        cantidad,
+        totalPrice,
+        fecha,
+        user: { connect: { id: userId } }
       }
-
-      // Calcular el precio total
-      const totalPrice = product.price * cantidad;
-
-      // Crear la venta, asociándola con el usuario
-      const venta = await prisma.venta.create({
-        data: {
-          user: { connect: { id: userId } }, // Asociar venta con el usuario
-          product: { connect: { id: productId } },
-          cantidad,
-          totalPrice,
-          fecha
-        }
-      });
-
-      return venta;
-    } catch (error) {
-      console.error('Error creating venta:', error);
-      throw error;
-    }
+    });
   }
 
   // Obtener todas las ventas de un usuario
   async getVentasByUser(userId) {
-    try {
-      const ventas = await prisma.venta.findMany({
-        where: { id: userId },
-        include: {
-          product: true, // Incluir información del producto
-          user: true // Incluir información del usuario
-        }
-      });
-      return ventas;
-    } catch (error) {
-      console.error('Error fetching ventas for user:', error);
-      throw error;
-    }
+    return await prisma.venta.findMany({
+      where: { userId },
+      include: {
+        product: true, // Incluir información del producto
+        user: true // Incluir información del usuario
+      }
+    });
   }
 
   // Obtener una venta por ID asociada a un usuario

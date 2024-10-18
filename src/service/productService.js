@@ -1,26 +1,30 @@
-import { prisma } from "../config/database.js";
+import { prisma } from '../config/database.js';
 
 class ProductService {
   // Crear un producto
-  async createProduct(data) {
+  async createProduct(userId ,name, price, stock, categoryId, supplierId) {
     return await prisma.product.create({
       data: {
-        name: data.name,
-        price: data.price,
-        stock: data.stock,
+        name,
+        price,
+        stock,
         category: {
-          connect: { id: Number(data.categoryId) }
+          connect: { id: Number(categoryId) }
         },
         provider: {
-          connect: { id: Number(data.supplierId) }
+          connect: { id: Number(supplierId) }
+        },
+        user: {
+          connect: { id: Number(userId) }
         }
       }
     });
   }
 
   // Obtener todos los productos
-  async getAllProducts() {
+  async getAllProducts(userId) {
     return await prisma.product.findMany({
+      where: { userId: Number(userId) },
       include: {
         category: true,
         provider: true
@@ -29,9 +33,12 @@ class ProductService {
   }
 
   // Obtener un producto por ID
-  async getProductById(id) {
+  async getProductById(userId,productId) {
     return await prisma.product.findUnique({
-      where: { id: Number(id) },
+      where: { 
+        id: Number(productId),
+        userId
+      },
       include: {
         category: true,
         provider: true
@@ -40,9 +47,12 @@ class ProductService {
   }
 
   // Actualizar un producto
-  async updateProduct(id, data) {
+  async updateProduct(userId, productId, data) {
     return await prisma.product.update({
-      where: { id: Number(id) },
+      where: { 
+        id: Number(productId),
+        userId: data.userId
+      },
       data: {
         name: data.name,
         categoryId: data.categoryId,
@@ -54,9 +64,12 @@ class ProductService {
   }
 
   // Eliminar un producto
-  async deleteProduct(id) {
+  async deleteProduct(userId, productId) {
     return await prisma.product.delete({
-      where: { id: Number(id) }
+      where: { 
+        id: Number(productId),
+        userId
+      }
     });
   }
 }

@@ -1,7 +1,9 @@
 import {Router} from "express";
 import { categoryController } from "../controller/categoryController.js";
+import { auth } from "./authRoutes.js";
 
 const router = Router()
+router.use(auth.protect());
 
 router
   .post("/", categoryController.createCategory)

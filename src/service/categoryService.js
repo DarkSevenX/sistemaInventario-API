@@ -1,54 +1,66 @@
-import { prisma } from "../config/database.js";
+import { prisma } from '../config/database.js';
 
 class CategoryService {
   // Crear una categoría
-  async createCategory(data) {
+  async createCategory(userId, name, description) {
     return await prisma.category.create({
       data: {
-        name: data.name,
-        description: data.description,
-      },
+        name,
+        description,
+        user: {
+          connect: {
+            id: userId
+          }
+        }
+      }
     });
   }
 
   // Obtener todas las categorías
-  async getAllCategories() {
+  async getAllCategories(userId) {
     return await prisma.category.findMany({
-      include: {
-        products: true,
+      where: {
+        user: { id: userId }
       },
+      include: { products: true }
     });
   }
 
   // Obtener una categoría por ID
-  async getCategoryById(id) {
+  async getCategoryById(categoryId, userId) {
     return await prisma.category.findUnique({
-      where: { id: Number(id) },
-      include: {
-        products: true,
+      where: { 
+        id: Number(categoryId),
+        user: { id: userId }
       },
+      include: { products: true }
     });
   }
 
   // Actualizar una categoría
-  async updateCategory(id, data) {
+  async updateCategory(userId, categoyId, data) {
     return await prisma.category.update({
-      where: { id: Number(id) },
+      where: { 
+        id: Number(categoyId),
+        userId
+      },
       data: {
         name: data.name,
-        description: data.description,
-      },
+        description: data.description
+      }
     });
   }
 
   // Eliminar una categoría
-  async deleteCategory(id) {
+  async deleteCategory(categoyId, userId) {
     return await prisma.category.delete({
-      where: { id: Number(id) },
+      where: { 
+        id: Number(categoyId),
+        userId
+      }
     });
   }
 }
 
 const categoryService = new CategoryService();
 export { categoryService };
-

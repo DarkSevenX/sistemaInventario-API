@@ -1,75 +1,108 @@
-import { providerService } from "../service/providerService.js";
+import { providerService } from '../service/providerService.js';
 
 class ProviderController {
   // crear un proveedor
   async createProvider(req, res) {
+    const { name, contact, email } = req.body;
+    const userId = req.user.id;
+
     try {
-      const data = req.body;
-      const provider = await providerService.createProvider(data);
-      res.status(201).json(provider);
+      const provider = await providerService.createProvider(
+        userId,
+        name,
+        contact,
+        email
+      );
+
+      return res.status(201).json(provider);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error creating the provider" });
+      return res.status(500).json({ message: 'Error creating the provider' });
     }
   }
 
   // Obtener todos los proveedores
   async getAllProviders(req, res) {
+    const userId = req.user.id;
+
     try {
-      const providers = await providerService.getAllProviders();
-      res.json(providers);
+      const providers = await providerService.getAllProviders(userId);
+      return res.status(200).json(providers);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error retrieving the providers" });
+      return res
+        .status(500)
+        .json({ message: 'Error retrieving the providers' });
     }
   }
 
   // Obtener un proveedor por ID
   async getProviderById(req, res) {
+    const userId = req.user.id;
+    const providerId = req.params.id;
+
     try {
-      const id = req.params.id;
-      const provider = await providerService.getProviderById(id);
+      const provider = await providerService.getProviderById(
+        userId,
+        providerId
+      );
+
       if (!provider) {
-        return res.status(404).json({ message: "Provider not found" });
+        return res.status(404).json({ message: 'Provider not found' });
       }
-      res.json(provider);
+
+      return res.status(200).json(provider);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error retrieving the provider" });
+      return res.status(500).json({ message: 'Error retrieving the provider' });
     }
   }
 
   // Actualizar un proveedor
   async updateProvider(req, res) {
+    const userId = req.user.id;
+    const providerId = req.params.id;
+    const data = req.body;
+
     try {
-      const id = req.params.id;
-      const data = req.body;
-      const updatedProvider = await providerService.updateProvider(id, data);
-      if (!updatedProvider) {
-        return res.status(404).json({ message: "Provider not found" });
-      }
-      res.json(updatedProvider);
+      const updatedProvider = await providerService.updateProvider(
+        userId,
+        providerId,
+        data
+      );
+
+      return res.json(updatedProvider);
     } catch (error) {
+      if (error.code === 'P2025') {
+        return res.status(404).json({ message: 'Provider not found' });
+      }
+
       console.error(error);
-      res.status(500).json({ message: "Error updating the provider" });
+      return res.status(500).json({ message: 'Error updating the provider' });
     }
   }
 
   // Eliminar un proveedor
   async deleteProvider(req, res) {
+    const providerId = req.params.id;
+    const userId = req.user.id;
+
     try {
-      const id = req.params.id;
-      const deletedProvider = await providerService.deleteProvider(id);
-      if (!deletedProvider) {
-        return res.status(404).json({ message: "Provider not found" });
-      }
-      res.status(204).send();
+      await providerService.deleteProvider(
+        userId,
+        providerId
+      );
+
+      return res.status(204).send();
     } catch (error) {
+      if(error.code === 'P2025') {
+        return res.status(404).json({ message: 'Provider not found' });
+      }
+
       console.error(error);
-      res.status(500).json({ message: "Error deleting the provider" });
+      return res.status(500).json({ message: 'Error deleting the provider' });
     }
   }
-
 }
 
 const providerController = new ProviderController();

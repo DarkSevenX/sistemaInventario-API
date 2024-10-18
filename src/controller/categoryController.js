@@ -3,8 +3,21 @@ import { categoryService } from '../service/categoryService.js';
 class CategoryController {
   // Crear una categoría
   async createCategory(req, res) {
+    const { name, description } = req.body;
+    const userId = req.user.id;
+
+    if (!name || !description) {
+      return res
+        .status(400)
+        .json({ message: 'Name and description are required' });
+    }
+
     try {
-      const category = await categoryService.createCategory(req.body);
+      const category = await categoryService.createCategory(
+        userId,
+        name,
+        description
+      );
       res.status(201).json(category);
     } catch (error) {
       console.error(error);
@@ -14,8 +27,9 @@ class CategoryController {
 
   // Obtener todas las categorías
   async getAllCategories(req, res) {
+    const userId = req.user.id;
     try {
-      const categories = await categoryService.getAllCategories();
+      const categories = await categoryService.getAllCategories(userId);
       res.json(categories);
     } catch (error) {
       console.error(error);
@@ -25,8 +39,14 @@ class CategoryController {
 
   // Obtener una categoría por ID
   async getCategoryById(req, res) {
+    const userId = req.user.id;
+    const categoryId = req.params.id;
+
     try {
-      const category = await categoryService.getCategoryById(req.params.id);
+      const category = await categoryService.getCategoryById(
+        categoryId,
+        userId
+      );
       if (!category) {
         return res.status(404).json({ message: 'Category not found' });
       }
@@ -39,9 +59,13 @@ class CategoryController {
 
   // Actualizar una categoría
   async updateCategory(req, res) {
+    const categoryId = req.params.id;
+    const userId = req.user.id;
+
     try {
       const category = await categoryService.updateCategory(
-        req.params.id,
+        userId,
+        categoryId,
         req.body
       );
 
@@ -57,8 +81,11 @@ class CategoryController {
 
   // Eliminar una categoría
   async deleteCategory(req, res) {
+    const userId = req.user.id;
+    const categoryId = req.params.id;
+
     try {
-      const category = await categoryService.deleteCategory(req.params.id);
+      const category = await categoryService.deleteCategory(categoryId,userId);
       if (!category) {
         return res.status(404).json({ message: 'Category not found' });
       }

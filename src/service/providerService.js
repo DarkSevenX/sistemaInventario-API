@@ -2,19 +2,21 @@ import { prisma } from "../config/database.js";
 
 class ProviderService {
   // Crear un proveedor
-  async createProvider(data) {
+  async createProvider(userId ,name, contact, email) {
     return await prisma.provider.create({
       data: {
-        name: data.name,
-        contact: data.contact,
-        email: data.email,
+        name,
+        contact,
+        email,
+        user: { connect: { id: userId } },
       },
     });
   }
 
   // Obtener todos los proveedores
-  async getAllProviders() {
+  async getAllProviders(userId) {
     return await prisma.provider.findMany({
+      where: { userId },
       include: {
         products: true,
       },
@@ -22,9 +24,12 @@ class ProviderService {
   }
 
   // Obtener un proveedor por ID
-  async getProviderById(id) {
+  async getProviderById(userId,providerId) {
     return await prisma.provider.findUnique({
-      where: { id: Number(id) },
+      where: { 
+        id: Number(providerId),
+        userId,
+      },
       include: {
         products: true,
       },
@@ -32,9 +37,12 @@ class ProviderService {
   }
 
   // Actualizar un proveedor
-  async updateProvider(id, data) {
+  async updateProvider(userId, providerId, data) {
     return await prisma.provider.update({
-      where: { id: Number(id) },
+      where: { 
+        id: Number(providerId),
+        userId
+      },
       data: {
         name: data.name,
         contact: data.contact,
@@ -44,9 +52,12 @@ class ProviderService {
   }
 
   // Eliminar un proveedor
-  async deleteProvider(id) {
+  async deleteProvider(userId, providerId) {
     return await prisma.provider.delete({
-      where: { id: Number(id) },
+      where: { 
+        id: Number(providerId),
+        userId,
+      },
     });
   }
 }

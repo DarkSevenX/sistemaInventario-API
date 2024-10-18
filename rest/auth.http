@@ -1,12 +1,11 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzI5MDI4MzM5fQ.VejK4l90zyeKba69sBAWJ-P6PEW0kKsdpVkhWZcGVfo
 
 ### nuevo usuario
 POST http://localhost:8000/auth/register
 Content-Type: application/json
 
 {
-  "username":"hola jajajajaaa",
-  "password":"123456"
+  "username":"david",
+  "password":"1"
 }
 
 ### iniciar sesión
@@ -18,59 +17,6 @@ Content-Type: application/json
   "password":"1234569"
 }
 
-### obtener datos de usuario (requiere autenticación)
-GET http://localhost:8000/user/
-token: {{token}}
-
 ###
-GET http://localhost:8000/venta
+GET http://localhost:8000/user
 token: {{token}}
-
-### crear venta (requiere autenticación)
-POST http://localhost:8000/venta
-Content-Type: application/json
-token: {{token}}
-
-{
-  "productId": 1,
-  "quantity": 10
-}
-
-### crear un producto
-POST http://localhost:8000/product
-Content-Type: application/json
-token: {{token}}
-
-{
-  "name": "Producto 2",
-  "categoryId": 3, 
-  "providerId": 1,
-  "price": 10.99,
-  "stock": 100
-}
-
-### obtener todos los productos
-GET http://localhost:8000/product
-
-### obtener producto por ID
-GET http://localhost:8000/product/2
-
-### actualizar producto
-PATCH http://localhost:8000/product/2
-Content-Type: application/json
-
-{
-  "name": "Producto 2 modificado"
-}
-
-### eliminar producto
-DELETE http://localhost:8000/product/2
-
-
-
-
-
-
-
-
-

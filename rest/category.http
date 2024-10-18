@@ -2,21 +2,25 @@
 ### crear nueva categoria
 POST http://localhost:8000/category
 Content-Type: application/json
+token: {{token}}
 
 {
-  "name": "deporte",
+  "name": "hogar",
   "description": "Descripcion de la nueva categoria"
 }
 
 ### obtener todas las categorías
 GET http://localhost:8000/category
+token: {{token}}
 
 ### obtener categoria por ID
-GET http://localhost:8000/category/1
+GET http://localhost:8000/category/3
+token: {{token}}
 
 ### actualizar categoria
 PATCH http://localhost:8000/category/1
 Content-Type: application/json
+token: {{token}}
 
 {
   "name": "hogar actualizado",
@@ -24,4 +28,5 @@ Content-Type: application/json
 }
 
 ### eliminar categoria
-DELETE http://localhost:8000/category/1
+DELETE http://localhost:8000/category/2
+token: {{token}}
