@@ -1,6 +1,6 @@
 
 ### crear nueva categoria
-POST http://localhost:8000/category
+djfjfPOST http://localhost:8000/category
 Content-Type: application/json
 token: {{token}}
 
