@@ -5,8 +5,8 @@ Content-Type: application/json
 token: {{token}}
 
 {
-  "name": "categoria2",
-  "description": "Descripcion de la nueva categoria"
+  "name": "deporte",
+  "description": "esta es la categoria de deporte"
 }
 
 ### obtener todas las categorías

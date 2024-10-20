@@ -7,10 +7,10 @@ class VentaService {
     const totalPrice = product.price * quantity;
 
     //reducir el stock dependiendo de la cantidad
-    await productService.updateProduct(userId, product.id, {
+    const updatedProduct = await productService.updateProduct(userId, product.id, {
       stock: product.stock - quantity
     });
-
+    
     // Crear la venta, asociándola con el usuario
     return await prisma.venta.create({
       data: {
@@ -19,6 +19,7 @@ class VentaService {
         },
         quantity,
         totalPrice,
+        remainingStock: updatedProduct.stock,
         user: {
           connect: { id: userId }
         }

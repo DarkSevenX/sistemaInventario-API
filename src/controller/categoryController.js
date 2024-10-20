@@ -6,34 +6,29 @@ class CategoryController {
     const { name, description } = req.body;
     const userId = req.user.id;
 
-    if (!name || !description) {
-      return res
-        .status(400)
-        .json({ message: 'Name and description are required' });
-    }
-
     try {
       const category = await categoryService.createCategory(
         userId,
         name,
         description
       );
-      res.status(201).json(category);
+      return res.status(201).json(category);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error creating category' });
+      return res.status(500).json({ message: 'Error creating category' });
     }
   }
 
   // Obtener todas las categorías
   async getAllCategories(req, res) {
     const userId = req.user.id;
+
     try {
       const categories = await categoryService.getAllCategories(userId);
-      res.json(categories);
+      return res.json(categories);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error getting categories' });
+      return res.status(500).json({ message: 'Error getting categories' });
     }
   }
 
@@ -47,13 +42,15 @@ class CategoryController {
         categoryId,
         userId
       );
+
       if (!category) {
         return res.status(404).json({ message: 'Category not found' });
       }
-      res.json(category);
+
+      return res.status(200).json(category);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error getting category' });
+      return res.status(500).json({ message: 'Error getting category' });
     }
   }
 
@@ -85,7 +82,7 @@ class CategoryController {
     const categoryId = req.params.id;
 
     try {
-      const category = await categoryService.deleteCategory(categoryId,userId);
+      const category = await categoryService.deleteCategory(categoryId, userId);
       if (!category) {
         return res.status(404).json({ message: 'Category not found' });
       }

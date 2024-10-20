@@ -9,20 +9,19 @@ class ProductController {
     const userId = req.user.id;
 
     try {
-      const category = await categoryService.getCategoryById(
-        categoryId,
-        userId
-      );
-      const provider = await providerService.getProviderById(
-        userId,
-        supplierId
-      );
+      const [category, provider] = await Promise.all([
+        categoryService.getCategoryById(categoryId, userId),
+        providerService.getProviderById(userId, supplierId)
+      ])
 
-      if (!category) {
-        return res.status(404).json({ message: 'Categoría no encontrada' });
-      }
-      if (!provider) {
-        return res.status(404).json({ message: 'Proveedor no encontrado' });
+      if (!category || !provider) {
+        return res
+          .status(404)
+          .json({
+            message: !category
+              ? 'Categoría no encontrada'
+              : 'Proveedor no encontrado'
+          });
       }
 
       const product = await productService.createProduct(
@@ -50,7 +49,9 @@ class ProductController {
       return res.status(200).json(products);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: 'Error obteniendo los productos' });
+      return res
+        .status(500)
+        .json({ message: 'Error obteniendo los productos' });
     }
   }
 

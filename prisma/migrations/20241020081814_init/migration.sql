@@ -14,7 +14,7 @@ CREATE TABLE "Product" (
     "price" REAL NOT NULL,
     "stock" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
-    CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Product_providerId_fkey" FOREIGN KEY ("providerId") REFERENCES "Provider" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Product_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -32,7 +32,7 @@ CREATE TABLE "Category" (
 CREATE TABLE "Provider" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "contact" TEXT NOT NULL,
+    "contact" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
     CONSTRAINT "Provider_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
@@ -45,6 +45,7 @@ CREATE TABLE "Venta" (
     "quantity" INTEGER NOT NULL,
     "totalPrice" REAL NOT NULL,
     "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "remainingStock" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     CONSTRAINT "Venta_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Venta_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
