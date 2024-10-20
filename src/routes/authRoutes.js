@@ -1,5 +1,5 @@
-import Auth from "express-authrouter";
-import { prisma } from "../config/database.js";
+import Auth from 'express-authrouter';
+import { prisma } from '../config/database.js';
 
-const auth = new Auth(prisma,'hola mundo!', ['username'])
-export { auth }
+const auth = new Auth(prisma, process.env.SECRET, ['username']);
+export { auth };
