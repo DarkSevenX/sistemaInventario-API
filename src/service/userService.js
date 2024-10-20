@@ -1,8 +1,11 @@
 import { prisma } from '../config/database.js';
 
-// user service
 class UserService {
-  // get user
+  /**
+   * Obtiene un usuario por ID.
+   * @param {number} userId - ID del usuario.
+   * @returns {Promise<object>} - El usuario solicitado.
+   */
   async getUser(userId) {
     return await prisma.user.findUnique({
       where: {
@@ -19,7 +22,13 @@ class UserService {
     });
   }
 
-  // update user
+  /**
+    * Crea un nuevo usuario en la base de datos.
+    * @param {string} username - Nombre de usuario.
+    * @param {string} password - Contraseña del usuario.
+    * @param {string} email - Email del usuario.
+    * @returns {Promise<object>} - El usuario creado.
+    */
   async updateUser(userId, data) {
     return await prisma.user.update({
       where: { id: Number(userId) },
@@ -31,7 +40,11 @@ class UserService {
     });
   }
 
-  // delete user
+  /**
+    * Elimina un usuario de la base de datos.
+    * @param {number} userId - ID del usuario.
+    * @returns {Promise<void>} - Sin retorno.
+    */
   async deleteUser(userId) {
     return await prisma.user.delete({
       where: { id: Number(userId) }

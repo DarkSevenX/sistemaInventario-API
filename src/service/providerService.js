@@ -1,7 +1,15 @@
+// @ts-check
 import { prisma } from "../config/database.js";
 
 class ProviderService {
-  // Crear un proveedor
+  /**
+    * Crear un proveedor en la base de datos.
+    * @param {number} userId - ID del usuario que creó el proveedor.
+    * @param {string} name - Nombre del proveedor.
+    * @param {number} contact - Contacto del proveedor.
+    * @param {string} email - Email del proveedor.
+    * @returns {Promise<object>} - El proveedor creado.
+  */
   async createProvider(userId ,name, contact, email) {
     return await prisma.provider.create({
       data: {
@@ -13,7 +21,11 @@ class ProviderService {
     });
   }
 
-  // Obtener todos los proveedores
+  /**
+    * Obtener todos los proveedores asociados con los productos de un usuario.
+    * @param {number} userId - ID del usuario.
+    * @returns {Promise<object[]>} - Lista de proveedores asociados con los productos del usuario.
+  */
   async getAllProviders(userId) {
     return await prisma.provider.findMany({
       where: { userId },
@@ -23,7 +35,12 @@ class ProviderService {
     });
   }
 
-  // Obtener un proveedor por ID
+  /**
+    * Obtener un proveedor específico asociado con los productos de un usuario.
+    * @param {number} userId - ID del usuario.
+    * @param {number} providerId - ID del proveedor.
+    * @returns {Promise<object>} - El proveedor específico asociado con los productos del usuario.
+  */
   async getProviderById(userId,providerId) {
     return await prisma.provider.findUnique({
       where: { 
@@ -36,7 +53,13 @@ class ProviderService {
     });
   }
 
-  // Actualizar un proveedor
+  /**
+    * Actualizar un proveedor.
+    * @param {number} userId - ID del usuario que actualiza el proveedor.
+    * @param {number} providerId - ID del proveedor.
+    * @param {object} data - Los nuevos valores del proveedor.
+    * @returns {Promise} - El proveedor actualizado.
+  */
   async updateProvider(userId, providerId, data) {
     return await prisma.provider.update({
       where: { 
@@ -51,7 +74,12 @@ class ProviderService {
     });
   }
 
-  // Eliminar un proveedor
+  /**
+    * Eliminar un proveedor
+    * @param {number} userId - ID del usuario.
+    * @param {number} providerId - ID del proveedor.
+    * @returns {Promise} - El proveedor eliminado.
+  */
   async deleteProvider(userId, providerId) {
     return await prisma.provider.delete({
       where: { 

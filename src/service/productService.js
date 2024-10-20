@@ -1,8 +1,17 @@
 import { prisma } from '../config/database.js';
 
 class ProductService {
-  // Crear un producto
-  async createProduct(userId ,name, price, stock, categoryId, supplierId) {
+  /**
+   * Crea un producto en la base de datos.
+   * @param {number} userId - ID del usuario que creó el producto.
+   * @param {string} name - Nombre del producto.
+   * @param {number} price - Precio del producto.
+   * @param {number} stock - Stock del producto.
+   * @param {number} categoryId - ID de la categoría del producto.
+   * @param {number} supplierId - ID del proveedor del producto.
+   * @returns {object} - El producto creado.
+   */
+  async createProduct(userId, name, price, stock, categoryId, supplierId) {
     return await prisma.product.create({
       data: {
         name,
@@ -21,7 +30,11 @@ class ProductService {
     });
   }
 
-  // Obtener todos los productos
+  /**
+   * Obtiene todos los productos asociados con las categorías y proveedores de un usuario.
+   * @param {number} userId - ID del usuario.
+   * @returns {Promise<object[]>} - Lista de productos asociados con las categorías y proveedores del usuario.
+   */
   async getAllProducts(userId) {
     return await prisma.product.findMany({
       where: { userId: Number(userId) },
@@ -32,10 +45,15 @@ class ProductService {
     });
   }
 
-  // Obtener un producto por ID
-  async getProductById(userId,productId) {
+  /**
+   * Obtiene un producto por ID.
+   * @param {number} userId - ID del usuario.
+   * @param {number} productId - ID del producto.
+   * @returns {Promise<object>} - El producto solicitado.
+   */
+  async getProductById(userId, productId) {
     return await prisma.product.findUnique({
-      where: { 
+      where: {
         id: Number(productId),
         userId
       },
@@ -46,10 +64,16 @@ class ProductService {
     });
   }
 
-  // Actualizar un producto
+  /**
+   * Actualiza un producto.
+   * @param {number} userId - ID del usuario que actualiza el producto.
+   * @param {number} productId - ID del producto.
+   * @param {object} data - Los nuevos valores del producto.
+   * @returns {Promise<object>} - El producto actualizado.
+   */
   async updateProduct(userId, productId, data) {
     return await prisma.product.update({
-      where: { 
+      where: {
         id: Number(productId),
         userId
       },
@@ -63,10 +87,15 @@ class ProductService {
     });
   }
 
-  // Eliminar un producto
+  /**
+   *Eliminar un producto
+   * @param {number} userId - ID del usuario.
+   * @param {number} productId - ID del producto.
+   * @returns {Promise} - El producto eliminado.
+   */
   async deleteProduct(userId, productId) {
     return await prisma.product.delete({
-      where: { 
+      where: {
         id: Number(productId),
         userId
       }

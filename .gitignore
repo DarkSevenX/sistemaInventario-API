@@ -1,1 +1,4 @@
-prisma
+.env
+rest
+node_modules
+dev.db

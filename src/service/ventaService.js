@@ -2,16 +2,24 @@ import { prisma } from '../config/database.js';
 import { productService } from './productService.js';
 
 class VentaService {
-  // Crear una nueva venta asociada a un usuario
+  /**
+   * Crea una nueva venta en la base de datos.
+   * @param {number} userId - ID del usuario.
+   * @param {object} product - Producto vendido.
+   * @param {number} quantity - Cantidad vendida del producto.
+   * @returns {Promise<object>} - La venta creada.
+   */
   async createVenta(userId, product, quantity) {
     const totalPrice = product.price * quantity;
 
-    //reducir el stock dependiendo de la cantidad
-    const updatedProduct = await productService.updateProduct(userId, product.id, {
-      stock: product.stock - quantity
-    });
-    
-    // Crear la venta, asociándola con el usuario
+    const updatedProduct = await productService.updateProduct(
+      userId,
+      product.id,
+      {
+        stock: product.stock - quantity
+      }
+    );
+
     return await prisma.venta.create({
       data: {
         product: {
@@ -27,7 +35,11 @@ class VentaService {
     });
   }
 
-  // Obtener todas las ventas de un usuario
+  /**
+    * Obtiene todas las ventas de un usuario.
+    * @param {number} userId - ID del usuario.
+    * @returns {Promise<Array<object>>} - Las ventas del usuario.
+    */
   async getVentasByUser(userId) {
     return await prisma.venta.findMany({
       where: { userId },
@@ -38,7 +50,12 @@ class VentaService {
     });
   }
 
-  // Obtener una venta por ID asociada a un usuario
+  /**
+    * Obtiene una venta por ID (solo si pertenece al usuario)
+    * @param {number} userId - ID del usuario.
+    * @param {number} ventaId - ID de la venta.
+    * @returns {Promise<object>} - La venta solicitada.
+    */
   async getVentaById(userId, ventaId) {
     try {
       const venta = await prisma.venta.findFirst({
@@ -57,7 +74,14 @@ class VentaService {
     }
   }
 
-  // Actualizar una venta (solo si pertenece al usuario)
+  /**
+    * Actualiza la cantidad y fecha de una venta (solo si pertenece al usuario)
+    * @param {number} userId - ID del usuario.
+    * @param {number} ventaId - ID de la venta.
+    * @param {number} cantidad - Nueva cantidad de la venta.
+    * @param {string} fecha - Nueva fecha de la venta (formato 'YYYY-MM-DD').
+    * @returns {Promise<object>} - El resultado de la operación.
+    */
   async updateVenta(userId, ventaId, cantidad, fecha) {
     try {
       const venta = await prisma.venta.updateMany({
@@ -79,7 +103,12 @@ class VentaService {
     }
   }
 
-  // Eliminar una venta (solo si pertenece al usuario)
+  /**
+    * Elimina una venta de la base de datos (solo si pertenece al usuario)
+    * @param {number} userId - ID del usuario.
+    * @param {number} ventaId - ID de la venta.
+    * @returns {Promise<object>} - El resultado de la operación.
+    */
   async deleteVenta(userId, ventaId) {
     try {
       const venta = await prisma.venta.deleteMany({
@@ -99,5 +128,4 @@ class VentaService {
 }
 
 const ventaService = new VentaService();
-
 export { ventaService };
