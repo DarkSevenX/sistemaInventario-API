@@ -10,10 +10,7 @@
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
 
-<div style="text-align: center; font-size:60px;">
-API Inventario
-</div>
-<br>
+# API Inventario
 
 La **API Inventario** es una solución basada en REST que permite gestionar eficientemente productos, categorías, proveedores y existencias en un sistema de inventario. Esta API facilita la creación, actualización, eliminación y consulta de información relacionada con el inventario, proporcionando un conjunto de endpoints para que los usuarios puedan integrarse fácilmente y gestionar sus recursos de inventario.
 
@@ -38,9 +35,9 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
 ## Rutas
 
 ### Auth
-<details>
- <summary><code>POST</code> <code><b>/auth/register</b></code> <code>(crea un nuevo producto)</code></summary>
 
+<details>
+ <summary><code>POST</code> <code><b>/auth/register</b></code> <code>(registra un nuevo usuario)</code></summary>
 
 #### parametros
 
@@ -72,16 +69,16 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     }
     ```
+- **`400`** `bad request faltan campos`
+    ```json
+    {
+      "error": "password is required"
+    }
+    ```
 - **`409`** `Conflict`
     ```json
     {
       "error": "username is already taken"
-    }
-    ```
-- **`400`** `bad request faltan campos`
-    ```json
-    {
-        "error": "password is required"
     }
     ```
 - **`500`** `Internal Server Error`
@@ -91,6 +88,90 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
     } 
     ```
 </details>     
+
+
+<details>
+<summary><code>POST</code> <code><b>/auth/login</b></code> <code>(loguea un usuario existente)</code></summary>
+
+##### parametros
+
+> ninguno
+
+##### Body
+- ##### headers
+
+ `Content-Type: application/json`
+
+| name          | type      | data type | descripción                     |
+| ------------- | --------- | --------- | ------------------------------- |
+| `username`    | requerido | string    | nombre de usuario |
+| `password`    | requerido | string    | password |
+
+```json
+{
+  "username": "new user",
+  "password": "new password"
+}
+```
+##### responses
+
+- **`200`** `login exitoso, devuelve un token JWT`
+
+    ```json
+    {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+    ```
+- **`400`** `bad request faltan campos`
+    ```json
+    {
+        "error": "password is required"
+    }
+    ```
+- **`401`** `unauthorized, password inconrrecta`
+    ```json
+    {
+      "error": "incorrect password"
+    }
+    ```
+- **`404`** `not found`
+    ```json
+    {
+      "error": "username is already taken"
+    }
+    ```
+- **`500`** `Internal Server Error`
+    ```json
+    {
+      "error": "error message..."
+    } 
+    ```
+</details>
+
+<details>
+<summary><code>Auth error responses</code></summary>
+
+todas las rutas se encuentran protegidas por jwt, el token es proporcionado
+al loguearse o registrarse. en cada solicitud se de be proporcionar el header 
+
+`token: <token proporcionado>`
+
+estos son los errores relacionados con el token de autenticacion y aplican
+para todos los endpoints
+
+- **`401`** `Token inválido o expirado`
+    ```json
+    {
+      "error": "invalid token"
+    }
+
+- **`403`** `no se proporciono un token en la solicitud`
+    ```json
+    {
+      "message": "no token provided"
+    }
+    ```
+</details>
 
 ### Product 
 
@@ -886,6 +967,7 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
 
 `Content-Type: application/json`
 
+
 | name       | type      | data type | descripción           |
 | ---------- | --------- | --------- | --------------------- |
 | `name`     | opcional  | string    | nombre del proveedor   |
@@ -912,6 +994,12 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
       "userId": 1
     }
     ```
+- **`400`** `bad request`
+    ```json
+    {
+      "error": "error en uno de los campos"
+    }
+    ```
 - **`404`** `proveedor no encontrado`
     ```json
     { "message": "Provider not found" }
@@ -926,7 +1014,9 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
 <details>
  <summary><code>DELETE</code> <code><b>/provider/{id}</b></code> <code>(elimina un proveedor por su ID)</code></summary>
 
+##### headers
 
+ `token: <token proporcionado al loguearse>`
 
 ##### Parámetros
 
@@ -956,13 +1046,13 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
 <details>
 <summary><code>POST</code> <code><b>/venta</b></code> <code>(crea una nueva venta)</code></summary>
 
-#### Body
+##### Body
 
-- ##### Parámetros
+##### Parámetros
 
 > Ninguno
 
-- ##### headers
+##### headers
 
  `Content-Type: application/json`
 
@@ -994,7 +1084,6 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
       }
     }
     ```
-
 - **`400`** `no hay stock suficiente`
     ```json
     { "error": "No hay stock suficiente" }
@@ -1053,7 +1142,7 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
 1. Clona el repositorio:
 
     ```bash
-    git clone https://github.com/usuario/inventario-api.git
+    git clone https://github.com/DarkSevenX/express-authRouter.git
     ```
 
 2. Instala las dependencias:
@@ -1066,22 +1155,21 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
 3. Configura las variables de entorno en un archivo `.env`:
 
     ```
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASS=password
-    DB_NAME=inventario_db
-    JWT_SECRET=tu_clave_secreta
+    DATABASE_URL="file:./dev.db"
+    SECRET="palabra secreta para jwt"
     ```
+    **`Nota`** para usar otra base de datos diferente a sqlite,
+    cambia la propiedad provider en el archivo **`schema.prisma`**
 
 4. Ejecuta las migraciones de la base de datos:
 
     ```bash
-    npx sequelize db:migrate
+    npx prisma migrate dev --name init
     ```
 
 5. Inicia el servidor:
 
     ```bash
-    npm start
+    npm run dev
     ```
 
