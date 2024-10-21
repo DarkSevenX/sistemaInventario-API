@@ -25,7 +25,7 @@ class CategoryController {
 
     try {
       const categories = await categoryService.getAllCategories(userId);
-      return res.json(categories);
+      return res.status().json(categories);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Error getting categories' });
