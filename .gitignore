@@ -2,3 +2,6 @@
 rest
 node_modules
 dev.db
+migrations
+dev.db-journal
+migration_lock.toml
