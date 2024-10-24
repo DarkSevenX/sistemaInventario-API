@@ -6,7 +6,9 @@ export const productSchema = Joi.object({
   stock: Joi.number().required(),
   categoryId: Joi.number().required(),
   supplierId: Joi.number().required()
-}).unknown(true)
+})
+  .unknown(true)
+  .prefs({ convert: false })
 
 export const updateProductSchema = Joi.object({
   name: Joi.string(),
@@ -14,4 +16,6 @@ export const updateProductSchema = Joi.object({
   stock: Joi.number(),
   categoryId: Joi.number(),
   supplierId: Joi.number()
-}).unknown(true)
+})
+  .unknown(true)
+  .prefs({ convert: false })

@@ -2,12 +2,14 @@ import Joi from 'joi';
 
 export const providerSchema = Joi.object({
   name: Joi.string().required(),
-  contact: Joi.number().required(),
+  contact: Joi.number().strict().required(),
   email: Joi.string().email().required(),
-}).unknown(false)
+})
+  .prefs({ convert: false })
 
 export const updateProviderSchema = Joi.object({
   name: Joi.string(),
-  contact: Joi.string(),
+  contact: Joi.number().strict(),
   email: Joi.string().email(),
-}).unknown(false)
+})
+  .prefs({ convert: false })
