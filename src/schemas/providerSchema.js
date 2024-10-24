@@ -5,6 +5,7 @@ export const providerSchema = Joi.object({
   contact: Joi.number().strict().required(),
   email: Joi.string().email().required(),
 })
+  .unknown(true)
   .prefs({ convert: false })
 
 export const updateProviderSchema = Joi.object({
@@ -12,4 +13,5 @@ export const updateProviderSchema = Joi.object({
   contact: Joi.number().strict(),
   email: Joi.string().email(),
 })
+  .unknown(true)
   .prefs({ convert: false })
