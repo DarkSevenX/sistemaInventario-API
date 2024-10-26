@@ -1,4 +1,5 @@
 import { providerService } from '../service/providerService.js';
+import { contactProviderToString } from '../utils/contactProviderToString.js';
 
 class ProviderController {
   // crear un proveedor
@@ -14,7 +15,8 @@ class ProviderController {
         email
       );
 
-      return res.status(201).json(provider);
+      const createdProvider = contactProviderToString(provider);
+      return res.status(201).json(createdProvider);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Error creating the provider' });
@@ -88,14 +90,11 @@ class ProviderController {
     const userId = req.user.id;
 
     try {
-      await providerService.deleteProvider(
-        userId,
-        providerId
-      );
+      await providerService.deleteProvider(userId, providerId);
 
       return res.status(204).send();
     } catch (error) {
-      if(error.code === 'P2025') {
+      if (error.code === 'P2025') {
         return res.status(404).json({ message: 'Provider not found' });
       }
 
