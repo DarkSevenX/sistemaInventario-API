@@ -46,7 +46,7 @@ model Category {
 model Provider {
   id        Int      @id @default(autoincrement())
   name      String
-  contact   BigInt
+  contact   String
   email     String   @unique
   products  Product[]
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)

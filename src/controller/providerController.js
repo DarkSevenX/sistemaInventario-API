@@ -1,5 +1,4 @@
 import { providerService } from '../service/providerService.js';
-import { contactProviderToString } from '../utils/contactProviderToString.js';
 
 class ProviderController {
   // crear un proveedor
@@ -15,8 +14,7 @@ class ProviderController {
         email
       );
 
-      const createdProvider = contactProviderToString(provider);
-      return res.status(201).json(createdProvider);
+      return res.status(201).json(provider);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Error creating the provider' });
