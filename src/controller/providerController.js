@@ -74,10 +74,14 @@ class ProviderController {
         data
       );
 
-      return res.json(updatedProvider);
+      return res.status(200).json(updatedProvider);
     } catch (error) {
       if (error.code === 'P2025') {
         return res.status(404).json({ message: 'Provider not found' });
+      }
+      else if (error.code === 'P2002') {
+        const conflictField = error.meta.target 
+        return res.status(409).json({ message: `${conflictField} is already in use` })
       }
 
       console.error(error);
