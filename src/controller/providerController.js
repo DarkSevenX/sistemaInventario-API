@@ -16,6 +16,9 @@ class ProviderController {
 
       return res.status(201).json(provider);
     } catch (error) {
+      if (error.code === 'P2002') {
+        return res.status(409).json({ message: 'Provider already registered' });
+      }
       console.error(error);
       return res.status(500).json({ message: 'Error creating the provider' });
     }
