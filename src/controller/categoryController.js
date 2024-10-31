@@ -1,7 +1,6 @@
 import { categoryService } from '../service/categoryService.js';
 
 class CategoryController {
-  // Crear una categoría
   async createCategory(req, res) {
     const { name, description } = req.body;
     const userId = req.user.id;
@@ -19,7 +18,6 @@ class CategoryController {
     }
   }
 
-  // Obtener todas las categorías
   async getAllCategories(req, res) {
     const userId = req.user.id;
 
@@ -32,7 +30,6 @@ class CategoryController {
     }
   }
 
-  // Obtener una categoría por ID
   async getCategoryById(req, res) {
     const userId = req.user.id;
     const categoryId = req.params.id;
@@ -43,18 +40,15 @@ class CategoryController {
         userId
       );
 
-      if (!category) {
-        return res.status(404).json({ message: 'Category not found' });
-      }
-
-      return res.status(200).json(category);
+      return !category
+        ? res.status(404).json({ message: 'Category not found' })
+        : res.status(200).json(category);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Error getting category' });
     }
   }
 
-  // Actualizar una categoría
   async updateCategory(req, res) {
     const categoryId = req.params.id;
     const userId = req.user.id;
@@ -68,31 +62,25 @@ class CategoryController {
 
       return res.json(category);
     } catch (error) {
-      if (error.code === 'P2025') {
-        return res.status(404).json({ message: 'Category not found' });
-      }
-      console.error(error);
-      return res.status(500).json({ message: 'Error updating category' });
+      console.log(error);
+      return error.code === 'P2025'
+        ? res.status(404).json({ message: 'Category not found' })
+        : res.status(500).json({ message: 'Error updating category' });
     }
   }
 
-  // Eliminar una categoría
   async deleteCategory(req, res) {
     const userId = req.user.id;
     const categoryId = req.params.id;
 
     try {
-      const category = await categoryService.deleteCategory(categoryId, userId);
-      if (!category) {
-        return res.status(404).json({ message: 'Category not found' });
-      }
+      await categoryService.deleteCategory(categoryId, userId);
       res.status(204).send();
     } catch (error) {
-      if (error.code === 'P2025') {
-        return res.status(404).json({ message: 'Category not found' });
-      }
-      console.error(error);
-      return res.status(500).json({ message: 'Error deleting category' });
+      console.log(error);
+      return error.code === 'P2025'
+        ? res.status(404).json({ message: 'Category not found' })
+        : res.status(500).json({ message: 'Error deleting category' });
     }
   }
 }

@@ -2,7 +2,6 @@ import { ventaService } from '../service/ventaService.js';
 import { productService } from '../service/productService.js';
 
 class VentaController {
-  // nueva venta
   async createVenta(req, res) {
     const { productId, quantity } = req.body;
     const userId = req.user.id;
@@ -28,7 +27,6 @@ class VentaController {
     }
   }
 
-  // obtener todas las ventas de un usuario
   async getVentasByUser(req, res) {
     const userId = req.user.id;
 
