@@ -27,6 +27,7 @@ La **API Inventario** es una solución basada en REST que permite gestionar efic
 
 - **Node.js** 
 - **Express**
+- **Express-authrouter**
 - **JWT (JSON Web Tokens)**
 - **Prisma ORM**
 - **Bcrypt**
